@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>Functional Programming for Pragmatics</title>
+
+        <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+        <meta name="author" content="Michael Haeuslmann">
+
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="node_modules/reveal.js/css/reveal.css">
+        <link rel="stylesheet" href="node_modules/reveal.js/css/theme/simple.css" id="theme">
+
+        <!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet" href="node_modules/reveal.js/lib/css/zenburn.css">
+
+        <style>
+            @font-face {
+                font-family: FiraCode;
+                src: url(FiraCode-Regular.woff2);
+            }
+
+            .reveal section img, .reveal section blockquote {
+                border: none;
+                box-shadow: none;
+            }
+
+            .reveal code {
+                font-family: FiraCode;
+                background: #3f3f3f;
+                color: #dcdcdc;
+            }
+
+            :not(pre) code {
+                padding: 1px;
+                margin: 2px;
+            }
+
+            .center {
+                text-align: center;
+            }
+
+            .reveal .smaller {
+                font-size: 0.7em;
+            }
+
+        </style>
+
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'node_modules/reveal.js/css/print/pdf.css' : 'node_modules/reveal.js/css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+
+        <div class="reveal">
+            <div class="slides">
+
+                <section>
+                    <div class="center"><img src="img/lightning-talks.png" alt=""></div>
+                    <ul style="font-size:0.7em;">
+                        <li>share anything cool/fun/interesting<br>(blog posts, new RFCs, funny bugs, open-source projects)</li>
+                        <li class="fragment">&lt;=5 minute slots</li>
+                        <li class="fragment">max. 3-4 "talks"</li>
+                        <li class="fragment">slides, no slides, anything goes</li>
+                        <li class="fragment">(not intended for recruiting)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Functional Programming</h3>
+                    <h4>for Pragmatic PHP Developers</h4>
+                    <img src="img/haskell.png" alt="">
+                    <p>PHP User Group Munich - 2017-09-27</p>
+                    <p>
+                        <small>Michael Haeuslmann for <a href="https://tngtech.com">TNG Technology Consulting GmbH</a> / <a href="http://twitter.com/michaelhaeu">@michaelhaeu</a></small>
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Disclaimer</h2>
+                    <blockquote>
+                        I am not an expert at functional programming. These opinions are my own and do not reflect the opinions of proper functional programmers ;)
+                    </blockquote>
+
+                    <blockquote class="fragment">
+                        This talk is from a pragmatic developer for other pragmatic developers.<br><br>We want to get stuff done!
+                    </blockquote>
+                </section>
+
+                <section data-background-image="img/wittgenstein.jpg" data-background-size="cover"></section>
+
+                <section data-background-image="img/unicorn.jpg" data-background-size="cover">
+                    <!-- <h2>Functional programming is not a hype</h2> -->
+                </section>
+
+                <section>
+                    <h2>1958 - LISP</h2>
+                    <p>First functional language</p>
+                    <pre><code class="lisp">
+(defun factorial (n &optional (acc 1))
+   (if (= n 0) acc
+       (factorial (- n 1) (* acc n))))
+                    </code></pre>
+                    <img src="img/mccarthy.jpg" alt="">
+                </section>
+                <section>
+                    <h2>1962 - Simula</h2>
+                    <p>First object-oriented language</p>
+                    <pre><code class="simula" style="font-size:0.6em;line-height:1.2em;" data-trim>
+Simulation Begin
+   Class FittingRoom; Begin
+      Ref (Head) door;
+      Boolean inUse;
+      Procedure request; Begin
+         If inUse Then Begin
+             Wait (door);
+             door.First.Out;
+         End;
+         inUse:= True;
+      End;
+      Procedure leave; Begin
+         inUse:= False;
+         Activate door.First;
+      End;
+      door:- New Head;
+   End;
+
+   Integer u;
+   Ref (FittingRoom) fittingRoom1;
+
+   fittingRoom1:- New FittingRoom;
+   Hold (100);
+End;
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>1980 - C++</h2>
+                    <p>C-with-classes</p>
+                    <pre style="float: left;width: 60%;"><code class="cpp">
+#include &lt;iostream&gt;
+
+using namespace std;
+
+class Box {
+   public:
+      double length;   // Length of a box
+      double breadth;  // Breadth of a box
+      double height;   // Height of a box
+};
+                    </code></pre>
+                    <img src="img/stroustrup.jpg" alt="" style="float: left; width: 35%;padding: 5px 0 0 20px;">
+                </section>
+                <section>
+                    <h2>1984 - Common Lisp</h2>
+                    <ul>
+                        <li>modern Lisp dialect</li>
+                        <li>still too many brackets</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>1990 - Haskell</h2>
+                    <p>Purely functional and lazy</p>
+                    <pre><code class="haskell">
+factorial n
+   | n &lt; 2     = 1
+   | otherwise = n * factorial (n - 1)
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>1995 - JavaScript</h2>
+                    <p>Not functional, but functions always have been first-class citizens</p>
+                    <pre><code class="js" style="width: 70%;float: left;padding-top: 15px;">
+class PseudoOO {
+    method() {
+        return
+            `I won't return what you
+                think I should.`;
+    }
+}
+                    </code></pre>
+                    <img src="img/eich.jpg" alt="" style="width: 25%;float: left;padding: 0 0 0 20px;">
+                </section>
+                <section>
+                    <h2>1995 - Java</h2>
+                    <p>"Modern" OO, support for a more functional style since Java 8</p>
+                    <pre><code class="java">
+class Person {
+    private string name;
+
+    Person(string name) {
+        this.name = name;
+    }
+
+    public string name() {
+        return name;
+    }
+}
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>2003 - Scala</h2>
+                    <p>Modern Java with many functional features</p>
+                    <pre><code class="scala">
+class Point(
+    val x: Double, val y: Double,
+    addToGrid: Boolean = false
+) {
+    // ...
+}
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>2005 - F#</h2>
+                    <p>Microsoft's answer to Scala</p>
+                    <pre><code>
+type Person(name : string, age : int) =
+    member x.Name = name
+    member x.Age = age
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>2007 - Clojure</h2>
+                    <ul>
+                        <li>Lisp with objects</li>
+                        <li>now runs on the JVM</li>
+                        <li>still too many brackets</li>
+                    </ul>
+                    <pre><code class="clojure">
+(def bit-bucket-writer
+  (proxy [java.io.Writer] []
+    (write [buf] nil)
+    (close []    nil)
+    (flush []    nil)))
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>1995 - PHP</h2>
+                    <!-- TODO: Examples -->
+                    <ul class="smaller">
+                        <li class="fragment">4.0 - array_map, array_filter, array_reduce</li>
+                        <li class="fragment">&lt; 5 - procedural, painful, "C as a scripting language with convenience functions"</li>
+                        <li class="fragment">5.4 - lambdas and closures, callable</li>
+                        <li class="fragment">5.5 - generators</li>
+                        <li class="fragment">5.6 - varargs</li>
+                        <li class="fragment">7.0 - anonymous classes, scalar return types, direct call</li>
+                        <li class="fragment">7.2 - Closure::fromCallable</li>
+                        <li class="fragment">7.3 - ??? Fat arrow functions, pipes, short closures</li>
+                    </ul>
+                </section>
+
+                <section>
+                	<h2>Arrow functions</h2>
+                	<ul>
+                		<li>concise</li>
+                		<li>easier to use</li>
+                		<li>automatic binding of scope to closure</li>
+                	</ul>
+                	<pre><code class="php" data-trim>
+array_map( fn($x) => $x * 2, [1, 2, 3] );
+                	</code></pre>
+                	<a href="https://wiki.php.net/rfc/arrow_functions">by Levi Morrison, Bob Weinand</a><br>
+                	<small>Status: Under Discussion</small>
+                </section>
+
+                <section>
+                	<h2>Pipe Operator (Hack)</h2>
+                    <p>Before:</p>
+					<pre><code class="php" data-trim>
+$ret =
+  array_merge(
+    $ret,
+    getFileArg(
+      array_map(
+        function ($x) use ($arg) { return $arg . '/' . $x; },
+        array_filter(
+          scandir($arg),
+          function ($x) { return $x !== '.' &amp;&amp; $x !== '..'); }
+        )
+      )
+    )
+  );
+					</code></pre>
+                	<a href="https://wiki.php.net/rfc/pipe-operator">by Sara Golemon</a><br>
+                	<small>Status: Under Discussion</small>
+                </section>
+
+                <section>
+                	<h2>Pipe Operator (Hack)</h2>
+                    <p>After:</p>
+                	<pre><code class="php" data-trim style="font-size:0.8em">
+$ret = scandir($arg)
+  |> array_filter($$, function($x) { return $x !== '.' &amp;&amp; $x != '..'; })
+  |> array_map(function ($x) use ($arg) { return $arg . '/' . $x; }, $$)
+  |> getFileArg($$)
+  |> array_merge($ret, $$);
+                	</code></pre>
+                    <a href="https://wiki.php.net/rfc/pipe-operator">by Sara Golemon</a><br>
+                    <small>Status: Under Discussion</small>
+                </section>
+
+                <section>
+                	<h2>Short Closures</h2>
+                	<p>Before:</p>
+                	<pre><code class="php" data-trim>
+$action = CustomerController::class . '::delete';
+                	</code></pre>
+                	<p class="fragment">After:</p>
+                	<pre class="fragment"><code class="php" data-trim>
+$action = {CustomerController::delete};
+
+// which is a simplification for
+$action = Closure::fromCallable('CustomerController::delete');
+                	</code></pre>
+                	<a href="https://wiki.php.net/rfc/short-closures">by Michał Brzuchalski</a><br>
+                	<small>Status: Draft</small>
+                </section>
+
+                <section>
+                	<h2>externals.io</h2>
+                	<img src="img/externalsio.png" alt="">
+                </section>
+
+                <section>
+                    <h2>Core principles of functional programming</h2>
+                    <ul>
+                        <li>Functions as first-class citizens</li>
+                        <li>Pure functions (i.e. no side-effects)</li>
+                        <li>Higher order functions</li>
+                        <li>Immutability</li>
+                        <li>Stateless</li>
+                        <li>Currying and composition</li>
+                        <!-- TODO: Chapter about laziness -->
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Functions as first-class citizens</h2>
+                    <ul>
+                        <li>Functions can be passed as arguments</li>
+                        <li>Functions can be returned from other functions</li>
+                        <li>Functions can be assigned to variables</li>
+                    </ul>
+                    <pre><code class="php">
+$times = function ($x) {
+    return function ($y) use ($x) {
+        return $x * $y;
+    };
+};
+$times(7)(6); // 42
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Pure functions</h2>
+                    <h3>(i.e. no side-effects)</h3>
+                    <p>The output of a function, depends only on the input arguments.</p>
+                    <pre><code class="php">
+function getUsers($db) {
+    return $db->query('SELECT * FROM users');
+}
+                    </code></pre>
+                </section>
+
+                <section>
+                    <blockquote>
+                        You wanted a banana but what you got was a gorilla holding the banana and the entire jungle.
+                        <br>
+                        - Joe Armstrong, Creator of Erlang
+                    </blockquote>
+                    <img src="img/gorilla.jpg" alt="">
+                </section>
+
+                <section>
+                    <h2>Stateless</h2>
+                    <ul>
+                        <li class="fragment">the more state, the harder to test</li>
+                        <li class="fragment">more reasons to change</li>
+                        <li class="fragment">unpredictable when state is shared and mutable</li>
+                        <li class="fragment">(hard to parallelize)</li>
+                    </ul>
+                    <pre class="fragment"><code class="php" data-trim>
+function bumpCounter() {
+    static $counter = 0;
+    ++$counter;
+    echo $counter;
+}
+bumpCounter(); // 1
+bumpCounter(); // 2
+                        </code></pre>
+                </section>
+
+                <section>
+                    <h2>Higher-order functions</h2>
+                    <ul>
+                        <li>functions which receive other functions as arguments</li>
+                        <li class="fragment">and/or return a function</li>
+                    </ul>
+                    <pre class="fragment"><code class="php" data-trim>
+$xs = [4, 5, 1, 2, 3];
+usort($xs, function ($x, $y) {
+    return $x &lt;=> $y;
+});
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Immutability</h2>
+                    <ul class="smaller">
+                        <li>the hardest thing when debugging is to figure out where a variable went wrong</li>
+                        <li class="fragment">encourages pure functions (you always want to return something)</li>
+                        <li class="fragment">allows checking for references instead of inner state</li>
+                    </ul>
+                    <pre><code class="php smaller fragment" data-trim>
+class Counter{
+    private $counter = 0;
+
+    public function increment() {
+        $clone = clone $this;
+        ++$clone->counter;
+        return $clone;
+    }
+
+    public function __toString() { /** ... */}
+}
+$c1 = (new Counter)->increment();
+$c2 = $c1->increment();
+echo "$c1 &lt; $c2"; // 1 &lt; 2
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Currying and composition</h2>
+                    <p>Describing addition in "Hindley-Milner Form" (Haskell):</p>
+                    <code class="fragment">add :: a -> b -> c</code>
+                    <ul>
+                        <li class="fragment">Add is a function which takes an <code>a</code></li>
+                        <li class="fragment">... and returns a function which takes a <code>b</code> ...</li>
+                        <li class="fragment">... and returns a <code>c</code>.</li>
+                    </ul>
+                    <h3 class="fragment">So why not simply<br><code>add(int $a, int $b) : int</code>?</h3>
+                </section>
+
+                <section>
+                    <h2>Let's say we want an increment function</h2>
+                    <p>We could do it the normal way:</p>
+                    <pre><code class="php">
+function increment($x) {
+    return $x + 1;
+}
+                    </code></pre>
+                    <p class="fragment">But we already have everything we need:</p>
+                    <pre class="fragment"><code class="php">
+$increment = add(1);
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Another one:</h2>
+                    <code class="fragment">map :: (a -> b) -> [a] -> [b]</code>
+                    <p class="fragment">Every function takes only one argument.</p>
+                    <ul>
+                        <li class="fragment">Map is a function which takes an function ...</li>
+                        <li class="fragment">... which maps an <code>a</code> to a <code>b</code> ...</li>
+                        <li class="fragment">... and returns a function which takes a list of <code>a</code> ...</li>
+                        <li class="fragment">... and returns a list of <code>b</code>.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Examples of functional style</h2>
+                    <ul>
+                        <li>Route definition in micro frameworks</li>
+                        <li>Promises</li>
+                        <li>Filter, map, reduce</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Filter, map, reduce</h2>
+                    <ul style="font-size:0.6em;">
+                        <li class="fragment">array array_filter ( array $array [, callable $callback [, int $flag = 0 ]] )</li>
+                        <li class="fragment">array array_map ( callable $callback , array $array1 [, array $... ] )</li>
+                        <li class="fragment">mixed array_reduce ( array $array , callable $callback [, mixed $initial = NULL ] )</li>
+                        <li class="fragment">bool array_walk ( array &amp;$array , callable $callback [, mixed $userdata = NULL ] )</li>
+                        <li class="fragment">array array_udiff ( array $array1 , array $array2 [, array $ ... ], callable $value_compare_func )</li>
+                        <li class="fragment">...</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Type-safe "iteration"</h2>
+                    <pre><code class="php">
+foreach ($xs as $x) {
+    /** @var Object $x */
+    $x->sideEffect();
+}
+
+array_walk($xs, function (Object $x) {
+    $x->sideEffect();
+});
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Route definition in micro frameworks</h2>
+                    <pre><code class="php smaller" data-trim>
+$app = new App();
+$app->get(
+    'customers',
+    function (RequestInterface $request, ResponseInterface $response) : ResponseInterface {
+        return $response;
+    }
+);
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Promises</h2>
+                    <ul>
+                        <li>Async promises with ReactPHP use functional concepts</li>
+                        <li>Wrap side-effects</li>
+                        <li>higher order functions for result handling</li>
+                        <li>map, reduce etc. for results</li>
+                        <li>not lazy</li>
+                    </ul>
+                    <small>(see continuation monad)</small>
+                </section>
+
+                <section>
+                    <h2>reactphp / promise</h2>
+                    <pre><code class="php smaller">
+$deferred = new React\Promise\Deferred();
+
+$deferred->promise()
+    ->then(function ($x) {
+        return $x + 1;
+    })
+    ->then(function ($x) {
+        throw new \Exception($x + 1);
+    })
+    ->otherwise(function (\Exception $x) {
+        return $x->getMessage() + 1;
+    })
+    ->then(function ($x) {
+        echo 'Mixed ' . $x;
+    });
+
+$deferred->resolve(1);
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Functional PHP libraries</h2>
+                    <ul>
+                        <li>functional-php</li>
+                        <li>php-functional</li>
+                        <li>(https://preprocess.io/)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>functional-php</h2>
+                    <pre><code class="php" data-noescape data-trim>
+function filter($collection, callable $callback) : array {}
+<span class="fragment">function map($collection, callable $callback) : array {}</span>
+<span class="fragment">function reduce_left($collection, callable $callback, $initial = null) : array {}</span>
+<span class="fragment">function reduce_right($collection, callable $callback, $initial = null) : array {}</span>
+<span class="fragment">function each($collection, callable $callback) : null {}</span>
+// ...
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>functional-php</h2>
+                    <h4>by Lars Strojny (@lstrojny)</h4>
+                    <p>Imperative:</p>
+                    <pre><code class="php" data-trim>
+foreach ($xs as $x) {
+    if ($x % 2 === 0) {
+        return true;
+    }
+}
+return false;
+                    </code></pre>
+                    <p class="fragment">Declarative:</p>
+                    <pre><code class="php fragment" data-trim>
+Functional\some($xs, function ($x) {
+    return $x % 2 === 0;
+});
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Let's take this further</h2>
+                    <p>A curried mod function</p>
+                    <pre><code class="php" data-trim>
+function mod($mod) {
+    return function ($x) use ($mod) {
+        return $x % $mod;
+    };
+}
+some($xs, mod(2));
+                    </code></pre>
+
+                    <p class="fragment">Or: if our operators were functions</p>
+                    <pre class="fragment"><code class="php" data-trim>
+$even = curry('%')(2);    // operators as functions RFC pending
+some($xs, $even);
+                    </code></pre>
+                </section>
+
+                <section>
+                    <!-- TODO: iFrame einbinden -->
+                    <iframe src="https://preprocess.io" style="width:100%;height:600px;"></iframe>
+                    <aside class="notes" style="font-size:0.3em;">
+                        <pre><code>// 1
+$xs = array_map(function ($x) { return $x * 2; }, [1, 2, 3]);
+
+var_dump($xs);
+// 2
+$xs = array_map(($x) => { return $x * 2; }, [1, 2, 3]);
+
+var_dump($xs);
+// 3
+$y = 1;
+$xs = array_map(($x) => { return ($x + 1) * 2; }, [1, 2, 3]);
+
+var_dump($xs);</code></pre>
+                        </ul>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Performance ...</h2>
+                    <ul>
+                        <li class="fragment">Premature optimization is the root of all evil</li>
+                        <li class="fragment">copy on write helps</li>
+                        <li class="fragment">don't worry about collections with less than 10000 entries</li>
+                    </ul>
+                    <img src="img/no.jpg" alt="">
+                </section>
+
+                <section>
+                    <h2>Lessons learned</h2>
+                    <ul>
+                        <li class="fragment">Functional concepts can help us write better OO code</li>
+                        <li class="fragment">Pure functions and immutability will safe you from debugging</li>
+                        <li class="fragment">Higher order functions and composition help simplify complex OO patterns</li>
+                        <li class="fragment">Libraries provide common functions (functional-php)</li>
+                        <li class="fragment">Document your callables using HMF (Hindley-Milner Form)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Thank you! Any Questions?</h2>
+                    <h2 class="fragment">Become vocal about functional programming in PHP.</h2>
+                </section>
+
+                <section>
+                    <h2>Sources</h2>
+                    <ul>
+                        <li>https://github.com/lstrojny/functional-php</li>
+                        <li>https://github.com/widmogrod/php-functional</li>
+                        <li>https://www.slideshare.net/boerdedavid/being-functional-in-php</li>
+                        <li>"Functional Programming in PHP" by Simon Holywell</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Figures</h2>
+                    <div style="overflow:scroll;width: 100%;height: 100%;">
+                        <ul>
+                            <li>Haskell Comic https://xkcd.com/1312/</li>
+                            <li>Lightning Talks https://www.meetup.com/ReactJS-Boston/events/228305317/</li>
+                            <li>Wittgenstein https://quotefancy.com/quote/1008074/Ludwig-Wittgenstein-The-limits-of-my-language-means-the-limits-of-my-world</li>
+                            <li>McCarthy http://history-computer.com/ModernComputer/Software/images/McCarthy.jpg</li>
+                            <li>Stroustrup http://www.stroustrup.com/Bjarne.jpg</li>
+                            <li>Gorilla http://media.tumblr.com/97691c212d7d07c2b6409ce42c505e03/tumblr_inline_mrcobe1z2M1qz4rgp.jpg</li>
+                        </ul>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+        <script src="node_modules/reveal.js/lib/js/head.min.js"></script>
+        <script src="node_modules/reveal.js/js/reveal.js"></script>
+
+        <script>
+
+            // More info https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                progress: true,
+                history: true,
+                center: false,
+                controls: false,
+
+                transition: 'fade', // none/fade/slide/convex/concave/zoom
+
+                // More info https://github.com/hakimel/reveal.js#dependencies
+                dependencies: [
+                    { src: 'node_modules/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'node_modules/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'node_modules/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'node_modules/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'node_modules/reveal.js/plugin/zoom-js/zoom.js', async: true },
+                    { src: 'node_modules/reveal.js/plugin/notes/notes.js', async: true }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>
