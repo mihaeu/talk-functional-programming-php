@@ -19,6 +19,7 @@
 
         <!-- Theme used for syntax highlighting of code -->
         <link rel="stylesheet" href="lib/css/zenburn.css">
+        <!--<link rel="stylesheet" href="lib/css/vs.css">-->
 
         <style>
             @font-face {
@@ -31,8 +32,8 @@
                 box-shadow: none;
             }
 
-            .reveal code {
-                font-family: FiraCode;
+            .dark code {
+                font-family: FiraCode,serif;
                 background: #3f3f3f;
                 color: #dcdcdc;
             }
@@ -68,7 +69,7 @@
 
     <body>
 
-        <div class="reveal">
+        <div class="reveal dark">
             <div class="slides">
 
                 <section>
@@ -103,7 +104,45 @@
                     </blockquote>
                 </section>
 
+                <section data-background-image="img/evolution.png" data-background-size="contain"></section>
+
                 <section data-background-image="img/wittgenstein.jpg" data-background-size="cover"></section>
+
+                <section>
+                    <h2>Why functional programming?</h2>
+                    <ul>
+                        <li class="fragment">Declarative vs. Imperative (what vs how?)</li>
+                        <li class="fragment">More concise</li>
+                        <li class="fragment">More generic and reusable</li>
+                        <li class="fragment"><del>Mathematically proven</del></li>
+                        <li class="fragment"><del>Parallel programming</del></li>
+                    </ul>
+                    <h4 class="fragment">&rAarr; A different way of looking at problems</h4>
+                </section>
+
+                <section>
+                    <h2>Declarative vs Imperative</h2>
+                    <p>SQL is declarative,<br>we only say <strong>what</strong> we want,<br>and not <strong>how</strong>.</p>
+                    <pre style="width:300px"><code class="sql" data-trim>
+SELECT *
+FROM users
+WHERE age="42"
+                    </code></pre>
+                    <h3 class="fragment">That doesn't mean we have to like SQL :)</h3>
+                </section>
+
+                <section>
+                    <h2><del>Mathematically proven</del></h2>
+                    <h3>Category Theory</h3>
+                    <img src="img/category.png" alt="" width="450"><br>
+                    <small><a href="http://ism.uqam.ca/~ism/academics/category-theory-and-applications/">http://ism.uqam.ca/~ism/academics/category-theory-and-applications/</a></small>
+                </section>
+
+                <section>
+                    <h2>Moore's Law</h2>
+                    <p>Processor's aren't getting any faster,<br>we can only expect to get more cores.</p>
+                    <img src="img/mooreslaw.png" alt="" width="500">
+                </section>
 
                 <section data-background-image="img/unicorn.jpg" data-background-size="cover">
                     <!-- <h2>Functional programming is not a hype</h2> -->
@@ -185,7 +224,7 @@ factorial n
                 <section>
                     <h2>1995 - JavaScript</h2>
                     <p>Not functional, but functions always have been first-class citizens</p>
-                    <pre><code class="js" style="width: 70%;float: left;padding-top: 15px;">
+                    <pre><code class="js smaller" data-trim style="width: 70%;float: left;padding-top: 15px;">
 class PseudoOO {
     method() {
         return
@@ -193,37 +232,48 @@ class PseudoOO {
                 think I should.`;
     }
 }
+
+const tax = R.curry((tax, price) => {
+  if (!_.isNumber(price)) return Left(new Error());
+
+  return  Right(price + (tax * price));
+});
                     </code></pre>
                     <img src="img/eich.jpg" alt="" style="width: 25%;float: left;padding: 0 0 0 20px;">
                 </section>
                 <section>
                     <h2>1995 - Java</h2>
                     <p>"Modern" OO, support for a more functional style since Java 8</p>
-                    <pre><code class="java">
-class Person {
-    private string name;
+                    <pre><code class="java" data-trim>
+List&lt;String> myList =
+    Arrays.asList("a1", "a2", "b1", "c2", "c1");
 
-    Person(string name) {
-        this.name = name;
-    }
+myList
+    .stream()
+    .filter(s -> s.startsWith("c"))
+    .map(String::toUpperCase)
+    .sorted()
+    .forEach(System.out::println);
 
-    public string name() {
-        return name;
-    }
-}
+// C1
+// C2
                     </code></pre>
                 </section>
 
                 <section>
                     <h2>2003 - Scala</h2>
                     <p>Modern Java with many functional features</p>
-                    <pre><code class="scala">
+                    <pre><code class="scala" data-trim>
 class Point(
     val x: Double, val y: Double,
     addToGrid: Boolean = false
 ) {
     // ...
 }
+
+val a = List(1, 2, 3, 4, 5)
+val b = a.map(x => x * x)
+val c = b.reduce((x, y) => x + y)
                     </code></pre>
                 </section>
 
@@ -257,13 +307,13 @@ type Person(name : string, age : int) =
                     <h2>1995 - PHP</h2>
                     <!-- TODO: Examples -->
                     <ul class="smaller">
-                        <li class="fragment">4.0 - array_map, array_filter, array_reduce</li>
+                        <li class="fragment">4.0 - <code>array_map</code>, <code>array_filter</code>, <code>array_reduce</code></li>
                         <li class="fragment">&lt; 5 - procedural, painful, "C as a scripting language with convenience functions"</li>
                         <li class="fragment">5.4 - lambdas and closures, callable</li>
                         <li class="fragment">5.5 - generators</li>
                         <li class="fragment">5.6 - varargs</li>
                         <li class="fragment">7.0 - anonymous classes, scalar return types, direct call</li>
-                        <li class="fragment">7.2 - Closure::fromCallable</li>
+                        <li class="fragment">7.2 - <code>Closure::fromCallable</code></li>
                         <li class="fragment">7.3 - ??? Fat arrow functions, pipes, short closures</li>
                     </ul>
                 </section>
@@ -354,7 +404,7 @@ $action = Closure::fromCallable('CustomerController::delete');
                 </section>
 
                 <section>
-                    <h2>Functions as first-class citizens</h2>
+                    <h2>Functions as<br>first-class citizens</h2>
                     <ul>
                         <li>Functions can be passed as arguments</li>
                         <li>Functions can be returned from other functions</li>
@@ -374,9 +424,13 @@ $times(7)(6); // 42
                     <h2>Pure functions</h2>
                     <h3>(i.e. no side-effects)</h3>
                     <p>The output of a function, depends only on the input arguments.</p>
-                    <pre><code class="php">
+                    <pre><code class="php" data-trim>
 function getUsers($db) {
     return $db->query('SELECT * FROM users');
+}
+
+public function getUsers() {
+    return $this->db->query('SELECT * FROM users');
 }
                     </code></pre>
                 </section>
@@ -410,27 +464,13 @@ bumpCounter(); // 2
                 </section>
 
                 <section>
-                    <h2>Higher-order functions</h2>
-                    <ul>
-                        <li>functions which receive other functions as arguments</li>
-                        <li class="fragment">and/or return a function</li>
-                    </ul>
-                    <pre class="fragment"><code class="php" data-trim>
-$xs = [4, 5, 1, 2, 3];
-usort($xs, function ($x, $y) {
-    return $x &lt;=> $y;
-});
-                    </code></pre>
-                </section>
-
-                <section>
                     <h2>Immutability</h2>
                     <ul class="smaller">
                         <li>the hardest thing when debugging is to figure out where a variable went wrong</li>
                         <li class="fragment">encourages pure functions (you always want to return something)</li>
                         <li class="fragment">allows checking for references instead of inner state</li>
                     </ul>
-                    <pre><code class="php smaller fragment" data-trim>
+                    <pre class="fragment"><code class="php smaller" data-trim>
 class Counter{
     private $counter = 0;
 
@@ -449,15 +489,31 @@ echo "$c1 &lt; $c2"; // 1 &lt; 2
                 </section>
 
                 <section>
+                    <h2>Higher-order functions</h2>
+                    <ul>
+                        <li>functions which receive other functions as arguments</li>
+                        <li class="fragment">and/or return a function</li>
+                    </ul>
+                    <pre class="fragment"><code class="php" data-trim>
+$xs = [4, 5, 1, 2, 3];
+usort($xs, function ($x, $y) {
+    return $x &lt;=> $y;
+});
+                    </code></pre>
+                </section>
+
+                <section>
                     <h2>Currying and composition</h2>
                     <p>Describing addition in "Hindley-Milner Form" (Haskell):</p>
                     <code class="fragment">add :: a -> b -> c</code>
+                    <br>
                     <ul>
                         <li class="fragment">Add is a function which takes an <code>a</code></li>
                         <li class="fragment">... and returns a function which takes a <code>b</code> ...</li>
                         <li class="fragment">... and returns a <code>c</code>.</li>
                     </ul>
-                    <h3 class="fragment">So why not simply<br><code>add(int $a, int $b) : int</code>?</h3>
+                    <br>
+                    <h4 class="fragment">So why not simply<br><code>add(int $a, int $b) : int</code>?</h4>
                 </section>
 
                 <section>
@@ -498,26 +554,28 @@ $increment = add(1);
                 <section>
                     <h2>Filter, map, reduce</h2>
                     <ul style="font-size:0.6em;">
-                        <li class="fragment">array array_filter ( array $array [, callable $callback [, int $flag = 0 ]] )</li>
-                        <li class="fragment">array array_map ( callable $callback , array $array1 [, array $... ] )</li>
-                        <li class="fragment">mixed array_reduce ( array $array , callable $callback [, mixed $initial = NULL ] )</li>
-                        <li class="fragment">bool array_walk ( array &amp;$array , callable $callback [, mixed $userdata = NULL ] )</li>
-                        <li class="fragment">array array_udiff ( array $array1 , array $array2 [, array $ ... ], callable $value_compare_func )</li>
+                        <li class="fragment">array array_filter ( array $array [, callable $callback [, int $flag = 0 ]] )<br><br></li>
+                        <li class="fragment">array array_map ( callable $callback , array $array1 [, array $... ] )<br><br></li>
+                        <li class="fragment">mixed array_reduce ( array $array , callable $callback [, mixed $initial = NULL ] )<br><br></li>
+                        <li class="fragment">bool array_walk ( array &amp;$array , callable $callback [, mixed $userdata = NULL ] )<br><br></li>
+                        <li class="fragment">array array_udiff ( array $array1 , array $array2 [, array $ ... ], callable $value_compare_func )<br><br></li>
                         <li class="fragment">...</li>
                     </ul>
                 </section>
 
                 <section>
                     <h2>Type-safe "iteration"</h2>
-                    <pre><code class="php">
+                    <pre><code class="php" data-noescape data-trim>
 foreach ($xs as $x) {
     /** @var Object $x */
     $x->sideEffect();
 }
-
+<span class="fragment">
 array_walk($xs, function (Object $x) {
     $x->sideEffect();
 });
+</span><span class="fragment">
+each($xs, fn($x) => $x->sideEffect());</span>
                     </code></pre>
                 </section>
 
@@ -537,20 +595,19 @@ $app->get(
                 <section>
                     <h2>Promises</h2>
                     <ul>
-                        <li>Async promises with ReactPHP use functional concepts</li>
-                        <li>Wrap side-effects</li>
-                        <li>higher order functions for result handling</li>
-                        <li>map, reduce etc. for results</li>
-                        <li>not lazy</li>
+                        <li>Async promises (e.g. from ReactPHP) use functional concepts</li>
+                        <li class="fragment">Wrap side-effects</li>
+                        <li class="fragment">higher order functions for result handling</li>
+                        <li class="fragment">map, reduce etc. for results</li>
+                        <li class="fragment">not lazy</li>
                     </ul>
                     <small>(see continuation monad)</small>
                 </section>
 
                 <section>
                     <h2>reactphp / promise</h2>
-                    <pre><code class="php smaller">
+                    <pre><code class="php smaller" data-trim>
 $deferred = new React\Promise\Deferred();
-
 $deferred->promise()
     ->then(function ($x) {
         return $x + 1;
@@ -564,28 +621,55 @@ $deferred->promise()
     ->then(function ($x) {
         echo 'Mixed ' . $x;
     });
-
 $deferred->resolve(1);
                     </code></pre>
                 </section>
 
                 <section>
                     <h2>Functional PHP libraries</h2>
-                    <ul>
-                        <li>functional-php</li>
-                        <li>php-functional</li>
-                        <li>(https://preprocess.io/)</li>
+                    <ul class="smaller">
+                        <li>
+                            functional-php
+                            <ul>
+                                <li class="fragment">small functions for everyday use</li>
+                                <li class="fragment">use what you need</li>
+                                <li class="fragment">not invasive</li>
+                            </ul>
+                        </li>
+                        <br>
+                        <li>
+                            php-functional
+                            <ul>
+                                <li class="fragment">more complicated functional features</li>
+                                <li class="fragment">low coverage (~60%)</li>
+                                <li class="fragment">interesting implementation of various monads</li>
+                            </ul>
+                        </li>
+                        <br>
+                        <li>
+                            https://preprocess.io/
+                            <ul>
+                                <li class="fragment">not a library</li>
+                                <li class="fragment">pre-processor (duh!)</li>
+                                <li class="fragment">makes functional programming more enjoyable</li>
+                            </ul>
+                        </li>
                     </ul>
                 </section>
 
                 <section>
                     <h2>functional-php</h2>
-                    <pre><code class="php" data-noescape data-trim>
+                    <pre><code class="php smaller" data-noescape data-trim>
 function filter($collection, callable $callback) : array {}
+
 <span class="fragment">function map($collection, callable $callback) : array {}</span>
+
 <span class="fragment">function reduce_left($collection, callable $callback, $initial = null) : array {}</span>
+
 <span class="fragment">function reduce_right($collection, callable $callback, $initial = null) : array {}</span>
+
 <span class="fragment">function each($collection, callable $callback) : null {}</span>
+
 // ...
                     </code></pre>
                 </section>
@@ -603,7 +687,7 @@ foreach ($xs as $x) {
 return false;
                     </code></pre>
                     <p class="fragment">Declarative:</p>
-                    <pre><code class="php fragment" data-trim>
+                    <pre class="fragment"><code class="php" data-trim>
 Functional\some($xs, function ($x) {
     return $x % 2 === 0;
 });
@@ -648,6 +732,13 @@ $xs = array_map(($x) => { return ($x + 1) * 2; }, [1, 2, 3]);
 var_dump($xs);</code></pre>
                         </ul>
                     </aside>
+                </section>
+
+                <section>
+                    <h2>Drawbacks</h2>
+                    <ul>
+                        <li></li>
+                    </ul>
                 </section>
 
                 <section>
@@ -696,6 +787,9 @@ var_dump($xs);</code></pre>
                             <li>McCarthy http://history-computer.com/ModernComputer/Software/images/McCarthy.jpg</li>
                             <li>Stroustrup http://www.stroustrup.com/Bjarne.jpg</li>
                             <li>Gorilla http://media.tumblr.com/97691c212d7d07c2b6409ce42c505e03/tumblr_inline_mrcobe1z2M1qz4rgp.jpg</li>
+                            <li>Simpsons https://medium.com/@cscalfani/so-you-want-to-be-a-functional-programmer-part-1-1f15e387e536</li>
+                            <li>Moore's Law http://www.overclock.net/t/1542835/pc-world-intel-moores-law-will-continue-through-7nm-chips/30</li>
+                            <li>Category Theory http://ism.uqam.ca/~ism/academics/category-theory-and-applications/</li>
                         </ul>
                     </div>
                 </section>
